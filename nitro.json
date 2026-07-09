@@ -1,0 +1,23 @@
+{
+  "cxxNamespace": ["incar"],
+  "ios": {
+    "iosModuleName": "Incar"
+  },
+  "android": {
+    "androidNamespace": ["incar"],
+    "androidCxxLibName": "incar"
+  },
+  "autolinking": {
+    "Incar": {
+      "ios": {
+        "language": "swift",
+        "implementationClassName": "Incar"
+      },
+      "android": {
+        "language": "kotlin",
+        "implementationClassName": "Incar"
+      }
+    }
+  },
+  "ignorePaths": ["node_modules"]
+}
