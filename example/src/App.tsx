@@ -1,7 +1,7 @@
 import { Text, View, StyleSheet } from 'react-native';
 import { multiply } from 'react-native-incar';
 
-const result = multiply(3, 7);
+const result = multiply(5, 10);
 
 export default function App() {
   return (

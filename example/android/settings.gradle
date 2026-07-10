@@ -1,6 +1,27 @@
 pluginManagement { includeBuild("../node_modules/@react-native/gradle-plugin") }
 plugins { id("com.facebook.react.settings") }
-extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autolinkLibrariesFromCommand() }
+// Resolve the Node binary used for RN autolinking.
+// GUI Gradle (Android Studio launched from Finder/Dock) does NOT inherit the shell
+// PATH, so bare "node"/"npx" can't be found when Node is installed via nvm. Set an
+// absolute path via `nodeBinary` in local.properties (machine-specific, git-ignored) or
+// the NODE_BINARY env var. Falls back to "node", which works from the CLI where PATH is
+// available. Keeps this committed file portable. (local.properties keys are not exposed
+// as Gradle properties, so we read the file directly here.)
+def nodeBinary = "node"
+def localPropsFile = new File(rootDir, "local.properties")
+if (localPropsFile.exists()) {
+  def localProps = new Properties()
+  localPropsFile.withInputStream { localProps.load(it) }
+  nodeBinary = localProps.getProperty("nodeBinary", nodeBinary)
+}
+nodeBinary = System.getenv("NODE_BINARY") ?: nodeBinary
+extensions.configure(com.facebook.react.ReactSettingsExtension){ ex ->
+  ex.autolinkLibrariesFromCommand([
+    nodeBinary,
+    "node_modules/@react-native-community/cli/build/bin.js",
+    "config"
+  ])
+}
 rootProject.name = 'incar.example'
 include ':app'
 includeBuild('../node_modules/@react-native/gradle-plugin')
